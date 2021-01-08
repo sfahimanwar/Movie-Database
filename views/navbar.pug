@@ -1,0 +1,34 @@
+#navbar
+    if url === "/home.html" || url === "/"
+        a#active(href='/home.html') HOME
+        a(href='/profile.html') PROFILE
+        if loggedIn === true
+            a(href='/logout') LOG OUT
+        else
+            a(href='/signin.html') SIGN-IN
+    else if url === "/signin.html" || url === "/signup.html"
+        a(href='/home.html') HOME
+        a(href='/profile.html') PROFILE
+        if loggedIn === true
+            a(href='/logout') LOG OUT
+        else
+            a#active(href='/signin.html') SIGN-IN
+    else if url === "/profile.html"
+        a(href='/home.html') HOME
+        a#active(href='/profile.html') PROFILE
+        if loggedIn === true
+            a(href='/logout') LOG OUT
+        else
+            a(href='/signin.html') SIGN-IN
+    else
+        a(href='/home.html') HOME
+        a(href='/profile.html') PROFILE
+        if loggedIn === true
+            a(href='/logout') LOG OUT
+        else
+            a(href='/signin.html') SIGN-IN
+    if loggedIn === true
+        form#search-bar(action='/search' method='post')
+            input#search(type='text' placeholder='Search movies' name='searchQuery' required)
+            button(type='submit')
+                i.fa.fa-search

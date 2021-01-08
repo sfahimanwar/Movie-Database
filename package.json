@@ -1,0 +1,9 @@
+{
+  "name": "movie_database_checkin_3",
+  "version": "1.0.0",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "pug": "^3.0.0"
+  }
+}

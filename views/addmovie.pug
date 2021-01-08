@@ -1,0 +1,48 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='UTF-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
+        link(href='/favicon.png' rel='icon')
+        link(rel='stylesheet' href='/website.css')
+        link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+        link(href='https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@300&family=Open+Sans&display=swap' rel='stylesheet')
+        title Add New Movies and People
+    body
+        include navbar
+        #add-movies-div
+            h5 Add Movies to Cinephile
+            form(action='/addMovie' method='post')
+                h6 Name
+                input#name-of-movie(type='text' name='title' required)
+                h6 Plot
+                textarea#plot-entry(name='plot' required)
+                h6 Runtime
+                input#runtime-entry(type='text' name='runtime' required)
+                h6 Year Released
+                input#year-entry(type='text' name='year' required)
+                h6 Genre 1
+                input#genre-1(type='text' name='genre1' required)
+                h6 Genre 2
+                input#genre-2(type='text' name='genre2' required)
+                h6 Actors
+                input#actor-entry-1(type='text' name='actor1' required)
+                input#actor-entry-2(type='text' name='actor2' required)
+                input#actor-entry-3(type='text' name='actor3' required)
+                h6 Writer
+                input#writer-entry(type='text' name='writer' required)
+                h6 Director
+                input#director-entry(type='text' name='director' required)
+                br
+                button#add-movie-button(type='submit') Add Movie
+            h5 Add a Person to the Database
+            form(action='/addPerson' method='post')
+                h6 Name
+                input#person-name(type='text' name='name' required)
+                h6 Role
+                input#role(type='text' name='role' required)
+                br
+                button#add-person-button(type='submit') Add Person
+
+        include footer
+        script(src='/client.js')

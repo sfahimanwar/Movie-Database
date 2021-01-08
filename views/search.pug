@@ -1,0 +1,34 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='UTF-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
+        link(href='/favicon.png' rel='icon')
+        link(rel='stylesheet' href='/website.css')
+        link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+        link(href='https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@300&family=Open+Sans&display=swap' rel='stylesheet')
+        title Search Movies
+    body
+        include navbar
+        #search-results
+            h2 Search Results
+            h6 Showing #{searchObj.length} Results for #{searchObj.searchQuery}
+            //-
+                p#filterValue(hidden) #{searchObj.searchQuery}
+                h6 Filter Results By
+                select#filter-criteria(name='criteria')
+                    option(value='Runtime') Runtime
+                    option(value='Year Released') Year Released
+                    option(value='Average Rating') Average Rating
+                br
+                select#filter-order(name='order')
+                    option(value='Ascending') Ascending
+                    option(value='Descending') Descending
+                br
+                button#filter-button Filter
+            ul
+                each movie in searchObj.searchResults
+                    li
+                        a(href='/movie/' + movie) #{movie}
+        include footer
+        script(src='/client.js')

@@ -1,0 +1,30 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='UTF-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
+        link(href='/favicon.png' rel='icon')
+        link(rel='stylesheet' href='/website.css')
+        link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+        link(href='https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@300&family=Open+Sans&display=swap' rel='stylesheet')
+        title Sign-in
+    body
+        include navbar
+        img#heading-logo(src='/website-logo.png' alt='Home')
+        #login-form-div
+            form#login-form(action='/signin' method='post')
+                h4 Sign-in
+                label Username
+                br
+                input#username-entry(type='text' placeholder='Enter Username' name='username' required)
+                br
+                label Password
+                br
+                input#password-entry(type='password' placeholder='Enter Password' name='password' required)
+                br
+                button#sign-in-button(type='submit') Sign-in
+                p
+                    | Don't have an account?
+                    a(href='/signup.html') Register here
+        include footer
+        script(src='/client.js')

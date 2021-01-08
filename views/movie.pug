@@ -1,0 +1,106 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='UTF-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
+        link(href='/favicon.png' rel='icon')
+        link(rel='stylesheet' href='/website.css')
+        link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+        link(href='https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@300&family=Open+Sans&display=swap' rel='stylesheet')
+        title #{objCopy.title}
+    body
+        include navbar
+        #movie-view-div
+            #movie-info
+                h5 #{objCopy.title}
+                p#release-year Release year: #{objCopy.yearReleased}
+                p#avg-rating Average Rating: #{objCopy.averageRating}
+                p#movie-runtime Runtime: #{objCopy.runtime}
+                p#plot-description #{objCopy.plot}
+                h6 Genre
+                ul#genre-list
+                    each genre in objCopy.genre
+                        li
+                            a(href='/genreSearch/' + genre) #{genre}
+                h6 Director
+                ul#director-list
+                    li
+                        a(href='/people/' + objCopy.director) #{objCopy.director}
+                h6 Writers
+                ul#writer-list
+                    each writer in objCopy.writers
+                        li
+                            a(href='/people/' + writer) #{writer}
+                    if userCopy.isContributing === true
+                        form(action='/addWriter/' + objCopy.movieID method='post')
+                            input#edit-writer(type='text' name='editWriter' required)
+                            br
+                            button#edit(type='submit') Add Writer
+                h6 Actors
+                ul#actor-list
+                    each actor in objCopy.actors
+                        li
+                            a(href='/people/' + actor) #{actor}
+                    if userCopy.isContributing === true
+                        form(action='/addActor/' + objCopy.movieID method='post')
+                            input#edit-actor(type='text' name='editActor' required)
+                            br
+                            button#edit(type='submit') Add Actor
+                h6 Similar Movies
+                ul#similar-movie-list
+                     each movie in objCopy.similarMovies
+                        li
+                            a(href='/movie/' + movie) #{movie}
+            #reviews
+                h5 Reviews
+                if objCopy.reviews.length > 0
+                    each review in objCopy.reviews
+                        h6
+                            a(href='/user/' + review.username) Username: #{review.username}
+                        p Score: #{review.rating}
+                        p #{review.summary}
+                        p #{review.fullReview}
+                else
+                    p No reviews for this movie yet
+            #add-review
+                h5 Add a Basic Review
+                h6 Rating
+                form(action='/addBasicReview/' + objCopy.movieID method='post')
+                    select#rating-select-basic(name='ratingSelect')
+                        option(value='0') 0
+                        option(value='1') 1
+                        option(value='2') 2
+                        option(value='3') 3
+                        option(value='4') 4
+                        option(value='5') 5
+                        option(value='6') 6
+                        option(value='7') 7
+                        option(value='8') 8
+                        option(value='9') 9
+                        option(value='10') 10
+                    br
+                    button#submit-basic-review(type='submit') Submit Review
+                br
+                h5 Add a Full Review
+                h6 Rating
+                form(action='/addFullReview/' + objCopy.movieID method='post')
+                    select#rating-select-full(name='ratingSelect')
+                        option(value='0') 0
+                        option(value='1') 1
+                        option(value='2') 2
+                        option(value='3') 3
+                        option(value='4') 4
+                        option(value='5') 5
+                        option(value='6') 6
+                        option(value='7') 7
+                        option(value='8') 8
+                        option(value='9') 9
+                        option(value='10') 10
+                    h6 Review Summary
+                    input#review-summary(type='text' name='reviewSummary' required)
+                    h6 Full Review
+                    textarea#full-review(name='fullReview' required)
+                    br
+                    button#submit-full-review(type='submit') Submit Review
+        include footer
+        script(src='/client.js')

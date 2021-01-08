@@ -1,0 +1,65 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='UTF-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
+        link(href='/favicon.png' rel='icon')
+        link(rel='stylesheet' href='/website.css')
+        link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+        link(href='https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@300&family=Open+Sans&display=swap' rel='stylesheet')
+        title Profile Page
+    body
+        include navbar
+        #user-profile-div
+            #user-info
+                h5 Username: #{user.username}
+                if user.isContributing === false
+                    h5#user-type User Type: Regular
+                else
+                    h5#user-type User Type: Contributing
+                h6 Notifications
+                ul#notification-list
+                    if user.notifications.length > 0
+                        each notification in user.notifications
+                            li #{notification}
+                    else
+                        p No new notifications
+                if user.notifications.length > 0
+                    form(action='/clearNotifications' method='post')
+                        button#clearNotifications(type='submit') Clear Notifications
+                h6 Users you follow
+                ul#user-following-list
+                    if user.followingUsers.length > 0
+                        each following in user.followingUsers
+                            li
+                                a(href='/user/' + following) #{following}
+                    else
+                        p You don't follow any user
+                h6 People you follow
+                ul#people-following-list
+                    if user.followingPeople.length > 0
+                        each person in user.followingPeople
+                            li
+                                a(href='/people/' + person) #{person}
+                    else
+                        p You don't follow any person
+                h6 Followers
+                ul#follower-list
+                    if user.followers.length > 0
+                        each follower in user.followers
+                            li
+                                a(href='/user/' + follower) #{follower}
+                    else
+                        p You have no followers
+            br
+            #movie-recommendations
+                h5 Movies you might like
+                ul#recommendations-list
+                    each movie in user.recommendedMovies
+                        li
+                            a(href='/movie/' + movie) #{movie}
+            br
+            button#change-user-type Switch Account Type
+            button#add-movie Contribute to Cinephile database
+        include footer
+        script(src='/client.js')

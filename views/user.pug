@@ -1,0 +1,42 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='UTF-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
+        link(href='/favicon.png' rel='icon')
+        link(rel='stylesheet' href='/website.css')
+        link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+        link(href='https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@300&family=Open+Sans&display=swap' rel='stylesheet')
+        title #{objCopy.username}
+    body
+        include navbar
+        #other-user-div
+            #other-user-view
+                h5 Username: #{objCopy.username}
+                if objCopy.isFollowing === true
+                    form(action='/unfollowUser/' + objCopy.userID method='post')
+                        button#follow-user(type='submit') Unfollow
+                else
+                    form(action='/followUser/' + objCopy.userID method='post')
+                        button#follow-user(type='submit') Follow
+                h6 Reviews by Them
+                ul#other-reviews-list
+                    if objCopy.reviews.length > 0
+                        each review in objCopy.reviews
+                            h6
+                                a(href='/movie/' + review.movieName) #{review.movieName}
+                            p SUMMARY : #{review.summary}
+                            p RATING : #{review.rating}
+                            p #{review.fullReview}
+                    else
+                        p No reviews by the user
+                h6 People they Follow
+                ul#other-user-follow
+                    if objCopy.followingPeople.length > 0
+                        each person in objCopy.followingPeople
+                            li
+                                a(href='/people/' + person) #{person}
+                    else
+                        p User doesn't follow any person
+        include footer
+        script(src='/client.js')

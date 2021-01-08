@@ -1,0 +1,34 @@
+doctype html
+html(lang='en')
+    head
+        meta(charset='UTF-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1.0')
+        link(href='/favicon.png' rel='icon')
+        link(rel='stylesheet' href='/website.css')
+        link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
+        link(href='https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@300&family=Open+Sans&display=swap' rel='stylesheet')
+        title #{objCopy.name}
+    body
+        include navbar
+        #people-view
+            h5#person-name #{objCopy.name}
+            if objCopy.isFollowing === true
+                button#follow-person Unfollow
+            else
+                button#follow-person Follow
+            h6 Roles
+            ul#role-list
+                each role in objCopy.roles
+                    li #{role}
+            h6 Movies
+            ul#movies-list
+                each movie in objCopy.movies
+                    li
+                        a(href='/movie/' + movie) #{movie}
+            h6 Collaborators
+            ul#collaborators
+                each collab in objCopy.collaborators
+                    li
+                        a(href='/people/' + collab) #{collab}
+        include footer
+        script(src='/client.js')

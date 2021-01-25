@@ -4,7 +4,7 @@ Movie Database Project
 
 The documentation for the public JSON API and how to use it is at the bottom section of the README
 
-All the dependencies have been installed for the application.
+All the dependencies can be installed using npm install in the same directory
 When starting the server, it'll take some time to actually run because it's initializing the server with the movie data.
 Furthermore, I took some assumptions while parsing the JSON data, for example - that each movie has only one director.
 The system when initializing, creates some users for the website. You may create your own account but here are some premades-

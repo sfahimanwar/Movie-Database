@@ -3,7 +3,7 @@ Student number - 101141744
 Movie Database Project
 
 Hosted on Heroku - https://sleepy-dusk-15362.herokuapp.com/ 
-Dyno goes offline if not accessed every 30 mins, link may not work on first try.
+Dyno goes offline if not accessed every 30 mins, link may not work on first try, so try again
 
 The documentation for the public JSON API and how to use it is at the bottom section of the README
 

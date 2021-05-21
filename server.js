@@ -3,6 +3,8 @@ const app = express();
 
 //Requires the business logic module that was exported
 const model = require('./business_logic.js');
+//Port Variable
+let port = process.env.PORT || 3000;
 //Calls the function which inititalizes the server with movie data
 model.initServer(model.movieData);
 //Runs another initialization script to create some users
@@ -413,5 +415,5 @@ app.post('/addActor/:movieID',function(req,res){
 
 
 
-app.listen(3000);
+app.listen(port);
 console.log("Server listening at http://localhost:3000");

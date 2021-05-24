@@ -19,52 +19,18 @@ app.use(express.urlencoded({extended: true}));
 const session = require('express-session');
 app.use(session({secret:"Please don't tamper with my session.", resave: false, saveUninitialized: false}));
 
-//Inserts the public JSON API router to handle any requests that start with /api
+//Inserts the different routers to handle requests
 let apiRouter = require('./routers/publicAPI-router');
-app.use('/api',apiRouter);
+app.use('/api', apiRouter);
+
+let authRouter = require('./routers/auth-router');
+app.use('/auth', authRouter);
 
 //Sets the template engine to pug and serves them from the views folder
 app.set("view engine","pug");
 app.set("views","views");
 
-//Handler for the sign in functionality and associates userID, username and password with the current session and
-//sets loggedIn to true
-//Uses the authUser function from the model to check if user is valid
-app.post('/signin',function(req,res){
-    if(model.authUser(req.body.username, req.body.password) && req.session.loggedIn != true){
-        req.session.username = req.body.username;
-        req.session.password = req.body.password;
-        req.session.loggedIn = true;
-        let userObj = model.getUserByName(req.body.username);
-        if(userObj != null){
-            //Sets session ID to the userID
-            req.session.userID = userObj.userID;
-        }
-        //Everytime user logs in, the system generates a new set of recommended movies
-        userObj.recommendedMovies = model.recommendMovies(userObj.userID);
-        console.log('Logged in!');
-        //Redirects user to profile page when they successfully log in
-        res.redirect('/profile.html');
-    }else{
-        //if login details are not valid
-        res.status(401).send('Invalid login details');
-    }
-});
-//handles creation of new users, if successful redirects to profile page, sets the details for the session too
-app.post('/signup', function(req,res){
-    if(model.signUp(req.body.username, req.body.password, req.body.g1, req.body.g2, req.body.g3) && req.session.loggedIn != true){
-        req.session.username = req.body.username;
-        req.session.password = req.body.password;
-        req.session.loggedIn = true;
-        req.session.userID = model.getUserByName(req.body.username).userID;
-        res.redirect('/profile.html');
-    }else{
-        res.status(401).send('Sign-up failed. Try a different username.');
-    }
-})
-
-
-//Handler that is used for all requests except for the ones above - signin and signup
+//Handler that is used for all requests except for the signin and signup
 //It prevents the user from accessing any page other than login page, signup page or home page if user is not logged in
 //Redirects users to sign in page
 app.use(function(req,res,next){
@@ -114,18 +80,6 @@ app.get('/signup.html',function(req,res){
     if(!loggedIn){
         let url = req.url;
         res.render('signup',{url,loggedIn});
-    }else{
-        res.redirect('/home.html');
-    }
-});
-
-//Handler for logging out a user from the website, assigns false to loggedIn, then destroys the session, then redirects
-//user to the home page
-app.get('/logout',function(req,res){
-    if(req.session.loggedIn === true){
-        req.session.loggedIn = false;
-        req.session.destroy();
-        res.redirect('/home.html');
     }else{
         res.redirect('/home.html');
     }

@@ -20,7 +20,7 @@ const session = require('express-session');
 app.use(session({secret:"Please don't tamper with my session.", resave: false, saveUninitialized: false}));
 
 //Inserts the public JSON API router to handle any requests that start with /api
-let apiRouter = require('./publicAPI-router');
+let apiRouter = require('./routers/publicAPI-router');
 app.use('/api',apiRouter);
 
 //Sets the template engine to pug and serves them from the views folder

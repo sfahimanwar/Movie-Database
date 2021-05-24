@@ -1,6 +1,6 @@
 //This router file handles requests for the PUBLIC JSON API
 const express = require('express');
-const model = require('./business_logic.js');
+const model = require('../business_logic.js');
 let router = express.Router();
 
 //GET request handler for a specific movie with movie parameter, parameter is movie name

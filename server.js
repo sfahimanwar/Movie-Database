@@ -25,16 +25,17 @@ app.use(
   })
 );
 
-//Inserts the different routers to handle requests
-let apiRouter = require("./routers/publicAPI-router");
-app.use("/api", apiRouter);
-
-let authRouter = require("./routers/auth-router");
-app.use("/auth", authRouter);
-
 //Sets the template engine to pug and serves them from the views folder
 app.set("view engine", "pug");
 app.set("views", "views");
+
+//Inserts router for the public JSON api
+let apiRouter = require("./routers/publicAPI-router");
+app.use("/api", apiRouter);
+
+//Inserts router for authentication
+let authRouter = require("./routers/auth-router");
+app.use("/auth", authRouter);
 
 //Handler that is used for all requests except for the signin and signup
 //It prevents the user from accessing any page other than login page, signup page or home page if user is not logged in
@@ -52,6 +53,10 @@ app.use(function (req, res, next) {
     res.redirect("/signin.html");
   }
 });
+
+//Inserts router for user actions and related pages
+let userRouter = require("./routers/user-router");
+app.use("/user", userRouter);
 
 //Handler for GET requests for the home page
 app.get("/", function (req, res) {
@@ -91,38 +96,6 @@ app.get("/signup.html", function (req, res) {
     res.render("signup", { url, loggedIn });
   } else {
     res.redirect("/home.html");
-  }
-});
-
-//GET request handler for the profile page
-app.get("/profile.html", function (req, res) {
-  let loggedIn = req.session.loggedIn;
-  let url = req.url;
-  //Uses business logic function to get the user using the current session userID
-  let reference = model.getUserByID(req.session.userID);
-  //Creates a new object with the required information
-  let user = {
-    userID: reference.userID,
-    username: reference.username,
-    isContributing: reference.isContributing,
-    followers: model.getUsersFollowers(reference.userID),
-    followingUsers: model.getUsersFollowingUsersList(reference.userID),
-    followingPeople: model.getUsersFollowingPeopleList(reference.userID),
-    recommendedMovies: reference.recommendedMovies,
-    notifications: reference.notifications,
-  };
-  res.render("profile", { url, loggedIn, user });
-});
-
-//PUT handler for the user changing to contributing user from regular and vice versa, the request is sent
-//by client-side AJAX requests
-app.put("/changeUserType", function (req, res) {
-  model.changeUserType(req.session.userID);
-  //Sends back different responses based on whether user is currently contributing or regular
-  if (model.getUserByID(req.session.userID).isContributing) {
-    res.status(200).send("User Type: Contributing");
-  } else {
-    res.status(200).send("User Type: Regular");
   }
 });
 
@@ -329,78 +302,6 @@ app.post("/addPerson", function (req, res) {
     //If the person already exists in the database
     res.status(400).send("Person already exists in the database");
   }
-});
-
-//GET request handler for a specific user, if user clicks on a user link of themselves, redirects to profile page
-app.get("/user/:user", function (req, res) {
-  let loggedIn = req.session.loggedIn;
-  let url = req.url;
-  let userParam = req.params.user;
-  //If link clicked on is the users itself
-  if (userParam === req.session.username) {
-    res.redirect("/profile.html");
-  } else {
-    let userObj = model.getUserByName(userParam);
-    let isFollowing = false;
-    //If user doesn't exist
-    if (userObj === undefined) {
-      res.status(404).send("User doesn't exist");
-    } else {
-      //Used to check if the user follows the user profile they're trying to visit
-      //will use it to set the follow/unfollow button using pug accordingly
-      if (
-        model
-          .getUserByID(req.session.userID)
-          .followingUsers.includes(userObj.userID)
-      ) {
-        isFollowing = true;
-      }
-      //Creates a copy of the object so as not to overwrite everything
-      let objCopy = Object.assign({}, userObj);
-      objCopy.isFollowing = isFollowing;
-      //Gets the people the user has followed (Director/Actor/Writer)
-      objCopy.followingPeople = model.getUsersFollowingPeopleList(
-        objCopy.userID
-      );
-      //Gets the reviews the user has made
-      objCopy.reviews = model.getUsersReviews(objCopy.userID);
-      for (let i = 0; i < objCopy.reviews.length; i++) {
-        objCopy.reviews[i].movieName = model.getMovieByID(
-          objCopy.reviews[i].movieID
-        ).title;
-      }
-      //Ensures the actual password is not sent when rendering the page
-      objCopy.password = "ENCRYPTED";
-      res.render("user", { url, loggedIn, objCopy });
-    }
-  }
-});
-
-//Handler for following a specific user
-app.post("/followUser/:userID", function (req, res) {
-  let param = parseInt(req.params.userID);
-  if (model.followUser(req.session.userID, param)) {
-    res.redirect("/user/" + model.getUserByID(param).username);
-  } else {
-    res.status(400).send("Failed to follow");
-  }
-});
-
-//Handler for unfollowing a specific user
-app.post("/unfollowUser/:userID", function (req, res) {
-  let param = parseInt(req.params.userID);
-  if (model.unfollowUser(req.session.userID, param)) {
-    res.redirect("/user/" + model.getUserByID(param).username);
-  } else {
-    res.status(400).send("Failed to unfollow");
-  }
-});
-
-//Route handler for when user clicks the Clear Notifications button in their profile.
-//Sets the users notifications array in the user object to an empty array, redirects to same page
-app.post("/clearNotifications", function (req, res) {
-  model.users[req.session.userID].notifications = [];
-  res.redirect("/profile.html");
 });
 
 //Route handler for adding a writer to a movie when the user is a contributor, movieID is used as a parameter in the route

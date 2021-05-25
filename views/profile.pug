@@ -25,7 +25,7 @@ html(lang='en')
                     else
                         p No new notifications
                 if user.notifications.length > 0
-                    form(action='/clearNotifications' method='post')
+                    form(action='/user/clearNotifications' method='post')
                         button#clearNotifications(type='submit') Clear Notifications
                 h6 Users you follow
                 ul#user-following-list

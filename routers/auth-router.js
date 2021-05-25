@@ -23,7 +23,7 @@ router.post("/signin", function (req, res) {
     userObj.recommendedMovies = model.recommendMovies(userObj.userID);
     console.log("Logged in!");
     //Redirects user to profile page when they successfully log in
-    res.redirect("/profile.html");
+    res.redirect("/user/profile.html");
   } else {
     //if login details are not valid
     res.status(401).send("Invalid login details");
@@ -46,7 +46,7 @@ router.post("/signup", function (req, res) {
     req.session.password = req.body.password;
     req.session.loggedIn = true;
     req.session.userID = model.getUserByName(req.body.username).userID;
-    res.redirect("/profile.html");
+    res.redirect("/user/profile.html");
   } else {
     res.status(401).send("Sign-up failed. Try a different username.");
   }

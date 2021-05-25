@@ -18,7 +18,7 @@ function changeAccountType() {
     }
   };
   //Sends a PUT request to change user type
-  xhttp.open("PUT", "/changeUserType", true);
+  xhttp.open("PUT", "/user/changeUserType", true);
   xhttp.send();
 }
 

@@ -14,10 +14,10 @@ html(lang='en')
             #other-user-view
                 h5 Username: #{objCopy.username}
                 if objCopy.isFollowing === true
-                    form(action='/unfollowUser/' + objCopy.userID method='post')
+                    form(action='/user/unfollowUser/' + objCopy.userID method='post')
                         button#follow-user(type='submit') Unfollow
                 else
-                    form(action='/followUser/' + objCopy.userID method='post')
+                    form(action='/user/followUser/' + objCopy.userID method='post')
                         button#follow-user(type='submit') Follow
                 h6 Reviews by Them
                 ul#other-reviews-list

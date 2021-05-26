@@ -63,11 +63,11 @@ function followPersonToggle() {
   };
   //Sends different AJAX requests based on whether user is following them or not
   if (followText === "Follow") {
-    xhttp.open("PUT", "/followPerson", true);
+    xhttp.open("PUT", "/people/followPerson", true);
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.send(JSON.stringify(userObj));
   } else {
-    xhttp.open("PUT", "/unfollowPerson", true);
+    xhttp.open("PUT", "/people/unfollowPerson", true);
     xhttp.setRequestHeader("Content-Type", "application/json");
     xhttp.send(JSON.stringify(userObj));
   }

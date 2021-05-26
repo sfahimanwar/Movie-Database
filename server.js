@@ -62,6 +62,10 @@ app.use("/user", userRouter);
 let peopleRouter = require("./routers/people-router");
 app.use("/people", peopleRouter);
 
+//Inserts router for movie actions and related pages
+let movieRouter = require("./routers/movie-router");
+app.use("/movie", movieRouter);
+
 //Handler for GET requests for the home page
 app.get("/", function (req, res) {
   //These loggedIn and url variables are important for the navbar of the pug pages, as it shows different things
@@ -119,56 +123,6 @@ app.get("/addmovie.html", function (req, res) {
   }
 });
 
-//Handler for the search function, when user types into the search box and clicks the button
-app.post("/search", function (req, res) {
-  let loggedIn = req.session.loggedIn;
-  let url = req.url;
-  let searchResults = model
-    .searchMovie(req.body.searchQuery)
-    .map((elem) => elem.title);
-  let searchObj = {
-    searchResults: searchResults,
-    searchQuery: req.body.searchQuery,
-    length: searchResults.length,
-  };
-  res.render("search", { url, loggedIn, searchObj });
-});
-
-//GET handler for a specific movie page, uses movie name as a parameter
-app.get("/movie/:movie", function (req, res) {
-  let loggedIn = req.session.loggedIn;
-  let url = req.url;
-  let user = model.getUserByID(req.session.userID);
-  let userCopy = Object.assign({}, user);
-  let movieParam = req.params.movie;
-  let movieObj = model.getMovieByName(movieParam);
-  if (movieObj === undefined) {
-    res.status(404).send("Movie doesn't exist");
-  } else {
-    //Makes a copy of the movie object so as not to overwrite actual data when adding the reviews
-    //Since JS uses pass by reference
-    let objCopy = Object.assign({}, movieObj);
-    objCopy.reviews = model.getMoviesReviews(objCopy.movieID);
-    //Rounds the average rating to 1 decimal place
-    objCopy.averageRating = objCopy.averageRating.toFixed(1);
-    res.render("movie", { loggedIn, url, objCopy, userCopy });
-  }
-});
-
-//Shows search results for a specific genre, its used when use clicks on a genre keyword on a movie page
-app.get("/genreSearch/:genre", function (req, res) {
-  let loggedIn = req.session.loggedIn;
-  let url = req.url;
-  let genreParam = req.params.genre;
-  let searchResults = model.searchByGenre(genreParam).map((elem) => elem.title);
-  let searchObj = {
-    searchResults: searchResults,
-    searchQuery: genreParam,
-    length: searchResults.length,
-  };
-  res.render("search", { url, loggedIn, searchObj });
-});
-
 //POST request handler for adding a basic review on the movie page
 app.post("/addBasicReview/:movieID", function (req, res) {
   let movieID = parseInt(req.params.movieID);
@@ -203,37 +157,6 @@ app.post("/addFullReview/:movieID", function (req, res) {
     res.redirect("/movie/" + title);
   } else {
     res.status(400).send("Adding Review Failed");
-  }
-});
-
-//POST request handler for adding a new movie in the contributing page which user can access through the profile
-//Movie data is sent through an HTML form
-app.post("/addMovie", function (req, res) {
-  if (
-    model.addMovie(
-      req.session.userID,
-      req.body.title,
-      req.body.year,
-      req.body.runtime,
-      req.body.plot,
-      req.body.genre1,
-      req.body.genre2,
-      req.body.actor1,
-      req.body.actor2,
-      req.body.actor3,
-      req.body.director,
-      req.body.writer
-    )
-  ) {
-    //redirects to the movie page of the movie added if it was successful
-    res.redirect("/movie/" + req.body.title);
-  } else {
-    //If adding the movie failed
-    res
-      .status(400)
-      .send(
-        "Adding movie failed. Either movie already exists or the people in the movie added are not in the database"
-      );
   }
 });
 

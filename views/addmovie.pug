@@ -12,7 +12,7 @@ html(lang='en')
         include navbar
         #add-movies-div
             h5 Add Movies to Cinephile
-            form(action='/addMovie' method='post')
+            form(action='/movie/addMovie' method='post')
                 h6 Name
                 input#name-of-movie(type='text' name='title' required)
                 h6 Plot

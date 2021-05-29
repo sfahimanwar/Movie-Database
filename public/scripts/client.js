@@ -6,20 +6,16 @@ let accountTypeText = document.getElementById("user-type");
 //Function that handles the changing of user type when the button is clicked
 function changeAccountType() {
   //Creates and sends an AJAX request
-  let xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      //Gets back the current user type from the server
-      accountTypeText.innerHTML = this.responseText;
-      //Reloads the page
+  fetch("/user/changeUserType", {
+    method: "PUT",
+  })
+    .then(() => {
       location.reload(true);
-      //Alerts the user when the user changes user type
       alert("You've changed your account type");
-    }
-  };
-  //Sends a PUT request to change user type
-  xhttp.open("PUT", "/user/changeUserType", true);
-  xhttp.send();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
 
 if (changeAccountTypeButton != null) {
@@ -53,22 +49,35 @@ if (followPersonButton != null) {
 function followPersonToggle() {
   //Created an object to be sent containing the name of the person of the page they're currently on
   let userObj = { name: name };
-  //Sends AJAX request
-  let xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      followPersonButton.innerText = this.responseText;
-      location.reload(true);
-    }
-  };
+
   //Sends different AJAX requests based on whether user is following them or not
   if (followText === "Follow") {
-    xhttp.open("PUT", "/people/followPerson", true);
-    xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.send(JSON.stringify(userObj));
+    fetch("/people/followPerson", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userObj),
+    })
+      .then(() => {
+        location.reload(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   } else {
-    xhttp.open("PUT", "/people/unfollowPerson", true);
-    xhttp.setRequestHeader("Content-Type", "application/json");
-    xhttp.send(JSON.stringify(userObj));
+    fetch("/people/unfollowPerson", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userObj),
+    })
+      .then(() => {
+        location.reload(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 }

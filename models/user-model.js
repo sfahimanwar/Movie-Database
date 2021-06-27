@@ -62,11 +62,17 @@ userSchema.query.byUsername = function (username) {
 //Static methods for the model, business logic functions will wrap around these methods
 userSchema.statics.authenticate = async function (username, password) {
   const doc = await this.findOne().byUsername(username).exec();
-  return doc && doc.password === password;
+  let isMatch = false;
+  if (doc) {
+    isMatch = await bcrypt.compare(password, doc.password);
+  }
+  return doc && isMatch;
 };
 
 userSchema.statics.signUp = async function (userObj) {
   let username = userObj.username;
+  let password = userObj.password;
+  userObj.password = await bcrypt.hash(password, saltRounds);
   const doc = await this.findOne({
     username: new RegExp(`^${username}$`, "i"),
   }).then((result) => {

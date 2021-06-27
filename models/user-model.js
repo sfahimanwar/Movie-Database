@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const ID = require("./id-model.js");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 const Schema = mongoose.Schema;
 
 let userSchema = new Schema({
@@ -57,21 +60,29 @@ userSchema.query.byUsername = function (username) {
 };
 
 //Static methods for the model, business logic functions will wrap around these methods
-userSchema.statics.authenticate = function (username, password) {
-  this.findOne()
-    .byUsername(username)
-    .exec()
-    .then((doc) => {
-      if (doc) {
-        if (doc.password === password) {
-          return true;
-        } else {
-          return false;
-        }
-      }
-      return false;
-    })
-    .catch((err) => console.log(err));
+userSchema.statics.authenticate = async function (username, password) {
+  const doc = await this.findOne().byUsername(username).exec();
+  return doc && doc.password === password;
+};
+
+userSchema.statics.signUp = async function (userObj) {
+  let username = userObj.username;
+  const doc = await this.findOne({
+    username: new RegExp(`^${username}$`, "i"),
+  }).then((result) => {
+    return result;
+  });
+
+  if (doc) {
+    return false;
+  } else {
+    async function inc() {
+      return await ID.incrementNextUserID();
+    }
+    const newUser = await this.create(userObj);
+    console.log(newUser);
+    return await inc();
+  }
 };
 
 module.exports = mongoose.model("User", userSchema);

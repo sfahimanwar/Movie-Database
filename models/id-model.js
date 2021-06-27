@@ -23,55 +23,114 @@ let idSchema = new Schema({
   },
 });
 
-idSchema.statics.getNextUserID = function (callback) {
-  this.findOne().where("name").equals("ID").lean().exec(callback);
-};
-
-idSchema.statics.getNextMovieID = function () {
-  this.findOne()
+idSchema.statics.getID = async function () {
+  return await this.findOne()
     .where("name")
     .equals("ID")
-    .lean()
     .exec()
-    .then((doc) => {
-      return doc.nextMovieID;
+    .then((results) => {
+      return results;
     })
     .catch((err) => {
       console.log(err);
-      return 0;
+      return err;
     });
 };
 
-idSchema.statics.getNextPersonID = function () {
-  this.findOne()
-    .where("name")
-    .equals("ID")
-    .lean()
-    .exec()
-    .then((doc) => {
-      return doc.nextPersonID;
+idSchema.statics.incrementNextUserID = async function () {
+  return await this.getID()
+    .then((results) => {
+      results.nextUserID++;
+      async function save() {
+        return await results
+          .save()
+          .then((updated) => {
+            console.log("USER: " + updated.nextUserID);
+            return true;
+          })
+          .catch((err) => {
+            console.log(err);
+            return false;
+          });
+      }
+      return save();
     })
     .catch((err) => {
       console.log(err);
-      return 0;
+      return false;
     });
 };
 
-idSchema.statics.getNextReviewID = function () {
-  this.findOne()
-    .where("name")
-    .equals("ID")
-    .lean()
-    .exec()
-    .then((doc) => {
-      return doc.nextReviewID;
+idSchema.statics.incrementNextMovieID = async function () {
+  return await this.getID()
+    .then((results) => {
+      results.nextMovieID++;
+      async function save() {
+        return await results
+          .save()
+          .then((updated) => {
+            console.log("MOVIE: " + updated.nextMovieID);
+            return true;
+          })
+          .catch((err) => {
+            console.log(err);
+            return false;
+          });
+      }
+      return save();
     })
     .catch((err) => {
       console.log(err);
-      return 0;
+      return false;
     });
 };
 
-idSchema.statics.incrementNextUserID = function () {};
+idSchema.statics.incrementNextReviewID = async function () {
+  return await this.getID()
+    .then((results) => {
+      results.nextReviewID++;
+      async function save() {
+        return await results
+          .save()
+          .then((updated) => {
+            console.log("REVIEW: " + updated.nextReviewID);
+            return true;
+          })
+          .catch((err) => {
+            console.log(err);
+            return false;
+          });
+      }
+      return save();
+    })
+    .catch((err) => {
+      console.log(err);
+      return false;
+    });
+};
+
+idSchema.statics.incrementNextPersonID = async function () {
+  return await this.getID()
+    .then((results) => {
+      results.nextPersonID++;
+      async function save() {
+        return await results
+          .save()
+          .then((updated) => {
+            console.log("PERSON: " + updated.nextPersonID);
+            return true;
+          })
+          .catch((err) => {
+            console.log(err);
+            return false;
+          });
+      }
+      return save();
+    })
+    .catch((err) => {
+      console.log(err);
+      return false;
+    });
+};
 
 module.exports = mongoose.model("ID", idSchema);

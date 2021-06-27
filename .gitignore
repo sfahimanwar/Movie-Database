@@ -1,3 +1,5 @@
 .DS_Store
 /node_modules
 .idea
+movie-data-short.json
+models/model-testing.js

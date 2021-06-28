@@ -26,7 +26,7 @@ mongoose
       const nextID = await ID.getID();
       let userObj = {
         userID: nextID.nextUserID, //unique user ID, uses the global ID to determine which to use
-        username: "jakubsilver", //unique username
+        username: "anderson silva", //unique username
         password: "abc123",
         isContributing: false, //Regular user by default
         followers: [], //array of follower's user ID's
@@ -46,7 +46,7 @@ mongoose
       .catch((err) => {
         console.log(err);
       });*/
-    async function auth() {
+    /*async function auth() {
       const isAuth = await User.authenticate("jakubsilver", "abc123");
       if (isAuth) {
         console.log("Authorized");
@@ -58,6 +58,24 @@ mongoose
     }
     auth().then((result) => {
       console.log(result);
+    });*/
+    /*User.changeUserType(0).then((result) => {
+      console.log(result);
+    });*/
+    /*User.followUser(0, 1).then((bool) => {
+      console.log(bool);
+    });*/
+    /*User.unfollowUser(0, 1).then((bool) => {
+      console.log(bool);
+    });*/
+    /*User.searchUsers("and").then((result) => {
+      console.log(result);
+    });*/
+    /*User.getUsersFollowers(1).then((array) => {
+      console.log(array);
+    });*/
+    User.getUsersFollowingUsersList(0).then((array) => {
+      console.log(array);
     });
   })
   .catch((err) => {

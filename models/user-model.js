@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const ID = require("./id-model.js");
 const Person = require("./person-model.js");
-const Review = require("./review-model.js");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const Schema = mongoose.Schema;
@@ -196,3 +195,5 @@ userSchema.statics.getUsersReviews = async function (userID) {
 };
 
 module.exports = mongoose.model("User", userSchema);
+
+const Review = require("./review-model.js");

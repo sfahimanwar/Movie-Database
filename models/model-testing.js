@@ -74,9 +74,29 @@ mongoose
     /*User.getUsersFollowers(1).then((array) => {
       console.log(array);
     });*/
-    User.getUsersFollowingUsersList(0).then((array) => {
+    /*User.getUsersFollowingUsersList(0).then((array) => {
       console.log(array);
-    });
+    });*/
+    /*Review.addBasicReview(0, 1, 8)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });*/
+    Review.addFullReview(
+      1,
+      5,
+      7.5,
+      "It's pretty good!",
+      "I don't wanna write this long ass review but here I am"
+    )
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   })
   .catch((err) => {
     console.log(err);

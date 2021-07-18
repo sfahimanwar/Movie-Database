@@ -84,7 +84,7 @@ mongoose
       .catch((err) => {
         console.log(err);
       });*/
-    Review.addFullReview(
+    /*Review.addFullReview(
       1,
       5,
       7.5,
@@ -96,7 +96,28 @@ mongoose
       })
       .catch((err) => {
         console.log(err);
-      });
+      });*/
+    /*User.getUsersReviews(1)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });*/
+    /*User.getUserByNameCaseIns("ANDERSON SILVA")
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });*/
+    /*Person.addPerson(90, "Saint Dumas", "Actor")
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });*/
   })
   .catch((err) => {
     console.log(err);

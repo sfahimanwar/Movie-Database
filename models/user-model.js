@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const ID = require("./id-model.js");
-const Person = require("./person-model.js");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const Schema = mongoose.Schema;
@@ -58,6 +57,15 @@ userSchema.query.byID = function (userID) {
 
 userSchema.query.byUsername = function (username) {
   return this.where("username").equals(username);
+};
+
+userSchema.statics.getUserByNameCaseIns = async function (username) {
+  const user = await this.findOne({
+    username: new RegExp(`^${username}$`, "i"),
+  }).then((result) => {
+    return result;
+  });
+  return user;
 };
 
 //Static methods for the model, business logic functions will wrap around these methods
@@ -197,3 +205,4 @@ userSchema.statics.getUsersReviews = async function (userID) {
 module.exports = mongoose.model("User", userSchema);
 
 const Review = require("./review-model.js");
+const Person = require("./person-model.js");
